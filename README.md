@@ -5,9 +5,9 @@ A brief description of what this project does and who it's for
 
 ## Authors
 
-- [@octokatherine](https://www.github.com/S1D0R-10)
-- [@octokatherine](https://www.github.com/m4gler)
-- [@octokatherine](https://www.github.com/Marc3usz)
+- [@S1D0R-10](https://www.github.com/S1D0R-10)
+- [@m4gler](https://www.github.com/m4gler)
+- [@Marc3usz](https://www.github.com/Marc3usz)
 
 
 ## Installation
