@@ -1,7 +1,28 @@
 # ProjektExpressPAI2
+🍽️ Restaurant API
 
-A brief description of what this project does and who it's for
+**Restaurant API** is a REST backend project that enables restaurant management. The system handles tables, menu, reservations, and orders. The project is part of an application designed to support the staff in a food service establishment.
 
+
+## 🔧 Technologies
+- Node.js
+- Express.js
+- TypeScript
+- MongoDB
+- Swagger (OpenAPI)
+- class-validator / class-transformer
+
+## 🚀 How to run the project?
+- Install dependencies: 
+```bash
+  npm install
+```
+- Create a .env file with the database configuration and server port
+
+- Run project:
+```bash
+  npm run dev
+```
 
 ## Authors
 
@@ -9,15 +30,6 @@ A brief description of what this project does and who it's for
 - [@m4gler](https://www.github.com/m4gler)
 - [@Marc3usz](https://www.github.com/Marc3usz)
 
-
-## Installation
-
-Install my-project with npm
-
-```bash
-  npm install my-project
-  cd my-project
-```
     
 ## Screenshots
 
