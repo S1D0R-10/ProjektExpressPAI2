@@ -1,13 +1,13 @@
 import bodyParser from "body-parser";
 import express from "express";
 
-import { connection } from "./config/database.config";
-import { ENV } from "./config/env";
+import { connection } from "@config/database";
+import { ENV } from "@config/env";
 
-import { tableController } from "./resources/tables/table.controller";
-import { reservationController } from "./resources/reservations/reservation.controller";
-import { menuController } from "./resources/menu/menu.controller";
-import { orderController } from "./resources/orders/order.controller";
+import { tableController } from "@tables/tables.controller";
+import { reservationController } from "@reservations/reservations.controller";
+import { menuController } from "@menu/menu.controller";
+import { orderController } from "@orders/orders.controller";
 
 connection(); // CONNECT MONGOOSE DB
 

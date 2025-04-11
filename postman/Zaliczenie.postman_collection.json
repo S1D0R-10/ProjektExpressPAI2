@@ -1,0 +1,88 @@
+{
+	"info": {
+		"_postman_id": "4e4b227a-a02d-46e3-9567-620bf18478f7",
+		"name": "Zaliczenie",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41574985"
+	},
+	"item": [
+		{
+			"name": "Menu",
+			"item": []
+		},
+		{
+			"name": "Reservations",
+			"item": []
+		},
+		{
+			"name": "Orders",
+			"item": []
+		},
+		{
+			"name": "Tables",
+			"item": [
+				{
+					"name": "Get all tables",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/tables",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tables"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new table",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"number\" : 3,\r\n    \"max_people\" : 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all tables Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/tables/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tables",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "MongoDB id of table to delete"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

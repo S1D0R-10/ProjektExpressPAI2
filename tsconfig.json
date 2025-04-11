@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "./dist",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipDefaultLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "disableSizeLimit": true,
+        "experimentalDecorators": true,
+        "baseUrl": "./",
+        "paths": {
+            "@consts/*": ["./src/common/consts/*"],
+            "@menu/*": ["./src/resources/menu/*"],
+            "@orders/*": ["./src/resources/orders/*"],
+            "@tables/*": ["./src/resources/tables/*"],
+            "@reservations/*": ["./src/resources/reservations/*"],
+            "@config/*": ["./src/common/config/*"],
+            "@middleware/*": ["./src/common/middleware/*"],
+            "@proj-types/*": ["./src/common/types/*"]
+        }
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "dist"]
+}
