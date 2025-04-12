@@ -14,10 +14,7 @@ export const validateDTO =
     <T extends DTO>(DtoClass: ClassConstructor<T>) =>
     async (request: Request, response: Response, next: NextFunction) => {
         try {
-            const dto: T = plainToInstance(DtoClass, request.body, {
-                excludeExtraneousValues: true,
-                exposeDefaultValues: true
-            });
+            const dto: T = plainToInstance(DtoClass, request.body);
             const errors = await validate(dto);
 
             if (errors.length > 0) {

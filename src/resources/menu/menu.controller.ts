@@ -47,35 +47,35 @@ menuController.post(
             );
             response.status(StatusCodes.CREATED).send(dish);
         } catch (error: unknown) {
+            response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
+        }
+    }
+);
+
+// PATCH /menu/:id - Update a dish
+menuController.patch(
+    "/:id",
+    validateDTO(UpdateDishDTO),
+    async (request: Request, response: Response) => {
+        try {
+            const { id } = request.params;
+            const updatedDish = await MenuService.updateDish(
+                id,
+                response.locals.dtoInstance
+            );
+            response.status(StatusCodes.OK).send(updatedDish);
+        } catch (error: unknown) {
             //@ts-ignore only checking for specific value
-            if (error?.message === ErrorMessages.DUPLICATE_VALUE) {
+            if (error?.message === ErrorMessages.INVALID_KEY) {
                 response
-                    .status(StatusCodes.BAD_REQUEST)
-                    .send(ErrorMessages.DUPLICATE_VALUE);
+                    .status(StatusCodes.NOT_FOUND)
+                    .send(ErrorMessages.INVALID_KEY);
             } else {
                 response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
             }
         }
     }
 );
-
-// PATCH /menu/:id - Update a dish
-menuController.patch("/:id", async (request: Request, response: Response) => {
-    try {
-        const { id } = request.params;
-        const updatedDish = await MenuService.updateDish(id, request.body);
-        response.status(StatusCodes.OK).send(updatedDish);
-    } catch (error: unknown) {
-        //@ts-ignore only checking for specific value
-        if (error?.message === ErrorMessages.INVALID_KEY) {
-            response
-                .status(StatusCodes.NOT_FOUND)
-                .send(ErrorMessages.INVALID_KEY);
-        } else {
-            response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
-        }
-    }
-});
 
 // DELETE /menu/:id - Delete a dish
 menuController.delete("/:id", async (request: Request, response: Response) => {
