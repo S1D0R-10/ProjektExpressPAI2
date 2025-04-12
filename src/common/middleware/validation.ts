@@ -14,17 +14,26 @@ export const validateDTO =
     <T extends DTO>(DtoClass: ClassConstructor<T>) =>
     async (request: Request, response: Response, next: NextFunction) => {
         try {
-            const dto: T = plainToInstance(DtoClass, request.body);
+            console.log('Validating request body:', request.body);
+            const dto: T = plainToInstance(DtoClass, request.body, {
+                excludeExtraneousValues: true,
+                exposeDefaultValues: true
+            });
+            
+            console.log('DTO after transform:', dto);
             const errors = await validate(dto);
+            console.log('Validation errors:', errors);
 
-            if (errors.length > 0)
+            if (errors.length > 0) {
+                console.log('Validation failed:', errors);
                 response.status(StatusCodes.BAD_REQUEST).send();
-            else {
+            } else {
+                console.log('Validation passed, setting dtoInstance:', dto);
                 response.locals.dtoInstance = dto;
                 next();
             }
         } catch (error) {
-            console.error(error);
+            console.error('Validation error:', error);
             response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
         }
     };
