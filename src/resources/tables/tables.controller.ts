@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 
 import { CreateTableDTO } from "@tables/tables.dto";
 import { validateDTO } from "@middleware/validation";
-import { TablesService } from "./tables.service";
+import { TablesService } from "@tables/tables.service";
 import { ErrorMessages } from "@proj-types/errors";
 
 export const tableController = express.Router();
