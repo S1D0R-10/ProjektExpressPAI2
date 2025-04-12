@@ -17,9 +17,9 @@ export const validateDTO =
             const dto: T = plainToInstance(DtoClass, request.body);
             const errors = await validate(dto);
 
-            if (errors.length > 0)
+            if (errors.length > 0) {
                 response.status(StatusCodes.BAD_REQUEST).send();
-            else {
+            } else {
                 response.locals.dtoInstance = dto;
                 next();
             }
