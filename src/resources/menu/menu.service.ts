@@ -1,4 +1,4 @@
-import type { CreateDishDTO, UpdateDishDTO } from "@menu/menu.dto";
+import { CreateDishDTO, UpdateDishDTO } from "@menu/menu.dto";
 import { MenuModel } from "@menu/menu.model";
 import { ErrorMessages } from "@proj-types/errors";
 
@@ -22,6 +22,10 @@ export class MenuService {
             const newDish = new MenuModel(dish);
             return await newDish.save();
         } catch (e: unknown) {
+            //@ts-ignore only checking specific error value
+            if (e?.code === 11000) {
+                throw new Error(ErrorMessages.DUPLICATE_VALUE);
+            }
             throw e;
         }
     }

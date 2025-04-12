@@ -1,8 +1,7 @@
-import express from "express";
-import type { Request, Response } from "express";
+import express, { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
-import { CreateDishDTO } from "@menu/menu.dto";
+import { CreateDishDTO, UpdateDishDTO } from "@menu/menu.dto";
 import { validateDTO } from "@middleware/validation";
 import { MenuService } from "@menu/menu.service";
 import { ErrorMessages } from "@proj-types/errors";
@@ -47,8 +46,15 @@ menuController.post(
                 response.locals.dtoInstance
             );
             response.status(StatusCodes.CREATED).send(dish);
-        } catch (error) {
-            response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
+        } catch (error: unknown) {
+            //@ts-ignore only checking for specific value
+            if (error?.message === ErrorMessages.DUPLICATE_VALUE) {
+                response
+                    .status(StatusCodes.BAD_REQUEST)
+                    .send(ErrorMessages.DUPLICATE_VALUE);
+            } else {
+                response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
+            }
         }
     }
 );
@@ -57,15 +63,9 @@ menuController.post(
 menuController.patch("/:id", async (request: Request, response: Response) => {
     try {
         const { id } = request.params;
-        console.log("PATCH Request - ID:", id);
-        console.log("PATCH Request - Body:", request.body);
-        
         const updatedDish = await MenuService.updateDish(id, request.body);
-        console.log("PATCH Result:", updatedDish);
-        
         response.status(StatusCodes.OK).send(updatedDish);
     } catch (error: unknown) {
-        console.error("PATCH Error:", error);
         //@ts-ignore only checking for specific value
         if (error?.message === ErrorMessages.INVALID_KEY) {
             response

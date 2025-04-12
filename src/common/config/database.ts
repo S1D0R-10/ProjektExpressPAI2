@@ -16,6 +16,6 @@ export const connection = async () => {
         console.log("DB CONNECTED");
     } catch (error) {
         console.error(`DB ERROR: ${error}`);
-        console.log("Continuing without database connection (Development Mode)");
+        process.exit(69);
     }
 };
