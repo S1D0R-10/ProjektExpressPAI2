@@ -38,8 +38,7 @@ tableController.post(
 tableController.delete("/:id", async (request: Request, response: Response) => {
     try {
         const { id } = request.params;
-        const result = await TablesService.deleteTable(id);
-        console.log(result)
+        await TablesService.deleteTable(id);
         response.status(StatusCodes.NO_CONTENT).send();
     } catch (error: unknown) {
         //@ts-ignore only checking for specific value
