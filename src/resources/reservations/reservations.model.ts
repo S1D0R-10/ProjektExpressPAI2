@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { REQ, STR, NUM, MIN } from "@consts/mongoose-field-declarations";
 
 export interface IReservation extends mongoose.Document {
-    tableId: string;
+    tableId: mongoose.Types.ObjectId;
     clientName: string;
     guests: number;
     date: Date;
@@ -11,7 +11,11 @@ export interface IReservation extends mongoose.Document {
 }
 
 const ReservationSchema = new mongoose.Schema<IReservation>({
-    tableId: { ...STR, ...REQ },
+    tableId: {
+        type: Schema.Types.ObjectId,
+        ref: "Tables",
+        required: true
+    },
     clientName: { ...STR, ...REQ },
     guests: { ...NUM, ...REQ, ...MIN(1) },
     date: { type: Date, ...REQ },
