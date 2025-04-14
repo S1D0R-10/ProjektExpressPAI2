@@ -1,5 +1,5 @@
-import type { CreateReservationDTO, UpdateReservationDTO } from "./reservations.dto";
-import { ReservationModel } from "./reservations.model";
+import type { CreateReservationDTO, UpdateReservationDTO } from "@reservations/reservations.dto";
+import { ReservationModel } from "@reservations/reservations.model";
 import { ErrorMessages } from "@proj-types/errors";
 
 export const ReservationsService = {
