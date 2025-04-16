@@ -31,7 +31,7 @@ reservationController.get("/", async (_, res) => {
     res.status(StatusCodes.OK).send(data);
 });
 
-reservationController.get("/:id", async (req, res) => {
+reservationController.get("/by-id/:id", async (req, res) => {
     try {
         const data = await ReservationsService.getReservationDetails(
             req.params.id
