@@ -22,6 +22,12 @@ orderController.post(
             );
             response.status(StatusCodes.CREATED).send(res);
         } catch (error) {
+            // @ts-ignore only checking specific error case
+            if (error?.message === ErrorMessages.INVALID_KEY) {
+                response
+                    .status(StatusCodes.BAD_REQUEST)
+                    .send(ErrorMessages.INVALID_KEY);
+            }
             response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
         }
     }
@@ -55,10 +61,15 @@ orderController.get(
     "/status/:status",
     async (request: Request, response: Response) => {
         try {
-            if (request.params.status in OrderStatus) {
+            if (
+                Object.values(OrderStatus).includes(
+                    request.params.status as OrderStatus
+                )
+            ) {
                 const res = await OrderService.getByStatus(
                     request.params.status as OrderStatus
                 );
+
                 response.status(StatusCodes.OK).send(res);
             } else {
                 response
@@ -66,6 +77,12 @@ orderController.get(
                     .send("Not a valid status");
             }
         } catch (error) {
+            // @ts-ignore only checking specific error case
+            if (error?.message === ErrorMessages.INVALID_KEY) {
+                response
+                    .status(StatusCodes.BAD_REQUEST)
+                    .send(ErrorMessages.INVALID_KEY);
+            }
             response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
         }
     }
@@ -91,7 +108,7 @@ orderController.patch(
 
 orderController.post("/delete-paid", async (_: Request, response: Response) => {
     try {
-        const res = OrderService.deleteCompleted();
+        const res = await OrderService.deleteCompleted();
         response.status(StatusCodes.OK).send(res);
     } catch (error) {
         response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
@@ -101,12 +118,13 @@ orderController.post("/delete-paid", async (_: Request, response: Response) => {
 orderController.patch(
     "/:id",
     validateDTO(UpdateOrderDTO),
-    async (response: Response, request: Request) => {
+    async (request: Request, response: Response) => {
         try {
-            const res = OrderService.editOrder(
+            const res = await OrderService.editOrder(
                 request.params.id,
                 response.locals.dtoInstance
             );
+            response.status(StatusCodes.OK).send(res)
         } catch (error) {
             // @ts-ignore only checking specific error case
             if (error?.message === ErrorMessages.INVALID_KEY) {

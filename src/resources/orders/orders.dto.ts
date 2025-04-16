@@ -4,6 +4,7 @@ import {
     IsArray,
     IsEnum,
     IsNotEmpty,
+    IsOptional,
     IsString,
 } from "class-validator";
 
@@ -48,23 +49,22 @@ export class CreateOrderDTO extends DTO {
 export class UpdateOrderDTO extends DTO {
     @Expose()
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     reservationId?: string;
 
     @Expose()
     @IsEnum(OrderStatus)
-    @IsNotEmpty()
+    @IsOptional()
     status?: OrderStatus;
 
     @Expose()
     @IsArray()
     @IsString({ each: true })
-    @ArrayMinSize(1)
-    @IsNotEmpty()
+    @IsOptional()
     orderedItems?: string[];
 
     @Expose()
     @IsEnum(PaymentType)
-    @IsNotEmpty()
+    @IsOptional()
     paymentType?: PaymentType;
 }

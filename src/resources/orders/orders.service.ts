@@ -37,8 +37,12 @@ export class OrderService {
     }
 
     static async createOrder(data: CreateOrderDTO) {
-        const order = new OrderModel(data);
-        return await order.save();
+        try {
+            const order = new OrderModel(data);
+            return await order.save();
+        } catch (error) {
+            throw new Error(ErrorMessages.INVALID_KEY);
+        }
     }
 
     static async deleteCompleted() {
