@@ -1,0 +1,488 @@
+openapi: 3.0.0
+info:
+  title: Restaurant Management API
+  description: API for managing a restaurant, including tables, menu, reservations, and orders.
+  version: 1.0.0
+paths:
+  /tables:
+    get:
+      summary: Get all tables
+      description: Returns all tables in the restaurant.
+      operationId: getAllTables
+      responses:
+        '200':
+          description: A list of tables
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    __id:
+                      type: string
+                    number:
+                      type: integer
+                    max_people:
+                      type: integer
+
+    post:
+      summary: Create a new table
+      description: Creates a new table with the specified data.
+      operationId: createTable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                number:
+                  type: integer
+                max_people:
+                  type: integer
+      responses:
+        '201':
+          description: Table created successfully
+        '400':
+          description: Invalid input
+
+  /tables/{id}:
+    delete:
+      summary: Delete a table
+      description: Deletes a table by its ID.
+      operationId: deleteTable
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the table to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Table deleted successfully
+        '400':
+          description: Invalid table ID
+
+  /menu:
+    get:
+      summary: Get all dishes
+      description: Returns all dishes in the menu.
+      operationId: getAllDishes
+      responses:
+        '200':
+          description: A list of dishes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    __id:
+                      type: string
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    price:
+                      type: number
+                      format: float
+                    category:
+                      type: string
+
+    post:
+      summary: Create a new dish
+      description: Creates a new dish in the menu.
+      operationId: createDish
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                  format: float
+                category:
+                  type: string
+      responses:
+        '201':
+          description: Dish created successfully
+        '400':
+          description: Invalid input
+
+  /menu/{id}:
+    get:
+      summary: Get dish by ID
+      description: Returns the dish with the specified ID.
+      operationId: getDishById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the dish to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single dish
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  __id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  price:
+                    type: number
+                    format: float
+                  category:
+                    type: string
+
+    patch:
+      summary: Edit dish
+      description: Edits a dish in the menu.
+      operationId: editDish
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the dish to edit
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                  format: float
+                category:
+                  type: string
+      responses:
+        '200':
+          description: Dish updated successfully
+        '400':
+          description: Invalid input
+
+    delete:
+      summary: Delete dish
+      description: Deletes a dish by its ID.
+      operationId: deleteDish
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the dish to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Dish deleted successfully
+        '400':
+          description: Invalid dish ID
+
+  /reservations:
+    get:
+      summary: Get all reservations
+      description: Returns all reservations in the restaurant.
+      operationId: getAllReservations
+      responses:
+        '200':
+          description: A list of reservations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    __id:
+                      type: string
+                    tableId:
+                      type: string
+                    clientName:
+                      type: string
+                    guests:
+                      type: integer
+                    date:
+                      type: string
+                      format: date-time
+                    status:
+                      type: string
+                      enum: [active, cancelled, completed]
+
+    post:
+      summary: Create a new reservation
+      description: Creates a new reservation.
+      operationId: createReservation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  type: string
+                clientName:
+                  type: string
+                guests:
+                  type: integer
+                date:
+                  type: string
+                  format: date-time
+                status:
+                  type: string
+                  enum: [active, cancelled, completed]
+      responses:
+        '201':
+          description: Reservation created successfully
+        '400':
+          description: Invalid input
+
+  /reservations/{id}:
+    get:
+      summary: Get reservation by ID
+      description: Returns the reservation with the specified ID.
+      operationId: getReservationById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the reservation to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single reservation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  __id:
+                    type: string
+                  tableId:
+                    type: string
+                  clientName:
+                    type: string
+                  guests:
+                    type: integer
+                  date:
+                    type: string
+                    format: date-time
+                  status:
+                    type: string
+                    enum: [active, cancelled, completed]
+
+    patch:
+      summary: Edit reservation
+      description: Edits the reservation.
+      operationId: editReservation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the reservation to edit
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientName:
+                  type: string
+                guests:
+                  type: integer
+                date:
+                  type: string
+                  format: date-time
+                status:
+                  type: string
+                  enum: [active, cancelled, completed]
+      responses:
+        '200':
+          description: Reservation updated successfully
+        '400':
+          description: Invalid input
+
+    delete:
+      summary: Delete reservation
+      description: Deletes the reservation with the specified ID.
+      operationId: deleteReservation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the reservation to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Reservation deleted successfully
+        '400':
+          description: Invalid reservation ID
+
+  /orders:
+    get:
+      summary: Get all orders
+      description: Returns all orders in the restaurant.
+      operationId: getAllOrders
+      responses:
+        '200':
+          description: A list of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    __id:
+                      type: string
+                    reservationId:
+                      type: string
+                    status:
+                      type: string
+                      enum: [pending, fulfilled, paid]
+                    orderedItems:
+                      type: array
+                      items:
+                        type: string
+                    paymentType:
+                      type: string
+                      enum: [cash, card, cheque]
+
+    post:
+      summary: Create a new order
+      description: Creates a new order for a reservation.
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reservationId:
+                  type: string
+                status:
+                  type: string
+                  enum: [pending, fulfilled, paid]
+                orderedItems:
+                  type: array
+                  items:
+                    type: string
+                paymentType:
+                  type: string
+                  enum: [cash, card, cheque]
+      responses:
+        '201':
+          description: Order created successfully
+        '400':
+          description: Invalid input
+
+  /orders/{id}:
+    get:
+      summary: Get order by ID
+      description: Returns the order with the specified ID.
+      operationId: getOrderById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the order to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  __id:
+                    type: string
+                  reservationId:
+                    type: string
+                  status:
+                    type: string
+                    enum: [pending, fulfilled, paid]
+                  orderedItems:
+                    type: array
+                    items:
+                      type: string
+                  paymentType:
+                    type: string
+                    enum: [cash, card, cheque]
+
+    patch:
+      summary: Edit order
+      description: Edits the specified order.
+      operationId: editOrder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the order to edit
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [pending, fulfilled, paid]
+                orderedItems:
+                  type: array
+                  items:
+                    type: string
+                paymentType:
+                  type: string
+                  enum: [cash, card, cheque]
+      responses:
+        '200':
+          description: Order updated successfully
+        '400':
+          description: Invalid input
+
+    delete:
+      summary: Delete order
+      description: Deletes the specified order.
+      operationId: deleteOrder
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the order to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Order deleted successfully
+        '400':
+          description: Invalid order ID

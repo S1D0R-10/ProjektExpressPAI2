@@ -13,6 +13,18 @@ tableController.get("/", async (_: Request, response: Response) => {
     response.status(StatusCodes.OK).send(tables);
 });
 
+
+/**
+ * @openapi
+ * /tables:
+ *   get:
+ *     summary: Get all tables
+ *     tags:
+ *       - Tables
+ *     responses:
+ *       200:
+ *         description: List of all tables
+ */
 tableController.post(
     "/",
     validateDTO(CreateTableDTO),
