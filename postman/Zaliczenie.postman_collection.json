@@ -2,22 +2,11 @@
 	"info": {
 		"_postman_id": "4e4b227a-a02d-46e3-9567-620bf18478f7",
 		"name": "Zaliczenie",
+		"description": "API for managing a restaurant, very simple and basic functionality. Includes:\n\n- creating / deleting tables within the restaurant\n    \n- creating / updating / deleting dishes on the menu\n    \n- creating / updating / deleting reservations\n    \n- creating / updating / deleting orders corresponding to reservations\n    \n- viewing info on each resource (like listing tables, menu, reservations etc)\n    \n\nresource paths:\n\n- Tables -> /tables\n    \n- Menu -> /menu\n    \n- Reservations -> /reservations\n    \n- Orders -> /orders\n    \n\nForeign keys are properly managed, so you will need to test in order (can't create a reservation without tables, can't order without dishes or a reservation)\n\npre-filled values in request (especially ids) may not work if you run tests in the wrong order (and some may already be deleted objects)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "41574985"
 	},
 	"item": [
-		{
-			"name": "Menu",
-			"item": []
-		},
-		{
-			"name": "Reservations",
-			"item": []
-		},
-		{
-			"name": "Orders",
-			"item": []
-		},
 		{
 			"name": "Tables",
 			"item": [
@@ -35,7 +24,8 @@
 							"path": [
 								"tables"
 							]
-						}
+						},
+						"description": "Returns all tables in database"
 					},
 					"response": []
 				},
@@ -52,12 +42,13 @@
 									"language": "json"
 								}
 							}
-						}
+						},
+						"description": "Creates a new table with specified data. the \\`number\\` is unique (duplicate table numbers don't make logical sense in the real world)"
 					},
 					"response": []
 				},
 				{
-					"name": "Get all tables Copy",
+					"name": "Delete table",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -74,15 +65,548 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "",
+									"value": "68001eb6e7d134ca49202df3",
 									"description": "MongoDB id of table to delete"
 								}
 							]
-						}
+						},
+						"description": "Deletes table at specified id. Thows \\`400\\` for invalid key"
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "Endpoints:  \nGET / -- returns all tables in restaurant\n\nPOST / -- creates new table\n\nDELETE /:id -- deletes table with specified id"
+		},
+		{
+			"name": "Menu",
+			"item": [
+				{
+					"name": "Get all dishes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/menu",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"menu"
+							]
+						},
+						"description": "Returns all the dishes in the menu"
+					},
+					"response": []
+				},
+				{
+					"name": "Get dish by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/menu/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"menu",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68000e2786d3bd3c096fdceb",
+									"description": "MongoDB id of table to get"
+								}
+							]
+						},
+						"description": "Returns the dish with provided id"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete dish",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/menu/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"menu",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6800100b86d3bd3c096fdcf3",
+									"description": "MongoDB id of dish to delete"
+								}
+							]
+						},
+						"description": "Deletes dish at specified id"
+					},
+					"response": []
+				},
+				{
+					"name": "Create new dish",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"fish\",\r\n    \"description\": \"fish a'la fish\",\r\n    \"price\": 21.37,\r\n    \"category\": \"main course\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/menu",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"menu"
+							]
+						},
+						"description": "Creates a new dish. Category is arbitrary, as not all cases could be covered, especially if API is used by restaurants with different languages"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit dish",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"porkchops\",\r\n    \"description\": \"halal porkchops\",\r\n    \"price\": 13.37,\r\n    \"category\": \"appetizer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/menu/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"menu",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68000f3586d3bd3c096fdcef",
+									"description": "MongoDB id of dish to edit"
+								}
+							]
+						},
+						"description": "Edits the dish from a partial object"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints:\n\nGET / -- get all dishes on menu\n\nGET /:id -- get dish by id\n\nDELETE /:id -- delete dish by id\n\nPOST / -- create new dish\n\nPATCH / -- edit the dish"
+		},
+		{
+			"name": "Reservations",
+			"item": [
+				{
+					"name": "Get all reservations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/reservations",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reservations"
+							]
+						},
+						"description": "Returns all reservations in database"
+					},
+					"response": []
+				},
+				{
+					"name": "Get reservations by filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/reservations/filter?clientName=kekius&tableId=68001d20a11d45d602e6fe38&guests=123&date=2025-04-16T20:23:45Z&notes=for the sigma&status=active",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reservations",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "clientName",
+									"value": "kekius",
+									"description": "name of client for which the reservation is made"
+								},
+								{
+									"key": "tableId",
+									"value": "68001d20a11d45d602e6fe38",
+									"description": "id of the table (NOT it's number)"
+								},
+								{
+									"key": "guests",
+									"value": "123",
+									"description": "number of guests"
+								},
+								{
+									"key": "date",
+									"value": "2025-04-16T20:23:45Z",
+									"description": "the ISO date (make sure to urlencode)"
+								},
+								{
+									"key": "notes",
+									"value": "for the sigma",
+									"description": "any notes that may have been made for the reservation, like peanut allergy (arbitrary)"
+								},
+								{
+									"key": "status",
+									"value": "active",
+									"description": "either `active`, `cancelled`, or `completed`"
+								}
+							]
+						},
+						"description": "Takes a filter from query parameters and returns all reservations which match it"
+					},
+					"response": []
+				},
+				{
+					"name": "Get reservation by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/reservations/by-id/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reservations",
+								"by-id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6800123b86d3bd3c096fdcfb",
+									"description": "MongoDB id of reservation to get"
+								}
+							]
+						},
+						"description": "Returns the reservation with specified id"
+					},
+					"response": []
+				},
+				{
+					"name": "Create new reservation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tableId\": \"67f9a479b903f788deaeea37\",\r\n    \"clientName\": \"dih\",\r\n    \"guests\": 100,\r\n    \"date\": \"2025-04-16T20:23:45Z\",\r\n    \"status\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/reservations",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reservations"
+							]
+						},
+						"description": "Creates a new reservation. Returns object as saved to the db"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit reservation",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"clientName\": \"kekius\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/reservations/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reservations",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6800123b86d3bd3c096fdcfb",
+									"description": "MongoDB id of reservation to edit"
+								}
+							]
+						},
+						"description": "Edits the reservation from a partial object"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete reservation",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/reservations/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reservations",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68001eb6e7d134ca49202df3",
+									"description": "MongoDB id of reservation to delete"
+								}
+							]
+						},
+						"description": "Deletes the reservation at the specified id"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints:\n\nGET / -- get all reservations\n\nGET /filter?filterQuery -- get all reservations with query parameters\n\nGET /by-id/:id -- get reservations by id\n\nPOST / -- create new reservation\n\nPATCH /:id -- edit the reservation details\n\nDELETE /:id -- delete the reservation at specified id"
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Get all orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/orders",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders"
+							]
+						},
+						"description": "Returns all orders in the database"
+					},
+					"response": []
+				},
+				{
+					"name": "Create new order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"reservationId\": \"6800123b86d3bd3c096fdcfb\",\r\n    \"status\": \"pending\",\r\n    \"orderedItems\": [\r\n        \"68000f3586d3bd3c096fdceg\"\r\n    ],\r\n    \"paymentType\": \"cash\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/orders",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders"
+							]
+						},
+						"description": "Creates a new order. Always sets the status to `pending` via middleware"
+					},
+					"response": []
+				},
+				{
+					"name": "Get order by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/orders/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68001eb6e7d134ca49202df3",
+									"description": "MongoDB id of order to get"
+								}
+							]
+						},
+						"description": "Returns order with specified id"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit order",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"paymentType\": \"cheque\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/orders/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68001d20a11d45d602e6fe38",
+									"description": "MongoDB id of order to edit"
+								}
+							]
+						},
+						"description": "Edits order with specified id from partial object"
+					},
+					"response": []
+				},
+				{
+					"name": "Get orders by status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/orders/status/:status",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								"status",
+								":status"
+							],
+							"variable": [
+								{
+									"key": "status",
+									"value": "fulfilled",
+									"description": "`pending` | `fulfilled` | `paid`"
+								}
+							]
+						},
+						"description": "Returns all orders with a specific status"
+					},
+					"response": []
+				},
+				{
+					"name": "Advance order status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/orders/advance-status/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								"advance-status",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68001eb6e7d134ca49202df3",
+									"description": "MongoDB id of order"
+								}
+							]
+						},
+						"description": "Increments the status of the order (pending -> fulfilled -> paid)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete paid orders",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/orders/delete-paid",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"orders",
+								"delete-paid"
+							]
+						},
+						"description": "Deletes all paid orders. Returns a string in the form:\n\n`Deleted ${count} completed orders`"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints:\n\nGET / -- get all orders\n\nGET /:id -- get order by id\n\nGET /status/:status -- get all orders with specific status (useful for knowing what to cook and which tables to ask for payment)\n\nPOST / -- creates new order\n\nPOST /delete-paid -- deletes all orders with \"paid\" status (no point deleting unfulfilled/unpaid orders)\n\nPATCH /:id -- edit the order\n\nPATCH /advance-status/:id -- advances the status of the order (pending -> fulfilled -> paid)"
 		}
 	]
 }

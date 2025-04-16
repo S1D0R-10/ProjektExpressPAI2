@@ -9,12 +9,14 @@ import {
 } from "@orders/orders.dto";
 import { OrderService } from "@orders/orders.service";
 import { ErrorMessages } from "@proj-types/errors";
+import { SetDefaultStatus } from "./setDefaultStatus.middleware";
 
 export const orderController = express.Router();
 
 orderController.post(
     "/",
     validateDTO(CreateOrderDTO),
+    SetDefaultStatus(OrderStatus.PENDING),
     async (_: Request, response: Response) => {
         try {
             const res = await OrderService.createOrder(
