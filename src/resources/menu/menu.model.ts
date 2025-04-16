@@ -10,10 +10,10 @@ export interface IDish extends mongoose.Document {
 }
 
 const DishSchema = new mongoose.Schema<IDish>({
-    name: {...STR, ...REQ},
-    description: {...STR, ...REQ},
-    price: {...NUM, ...REQ, ...MIN(0)},
-    category: {...STR, ...REQ}
+    name: { ...STR, ...REQ },
+    description: { ...STR, ...REQ },
+    price: { ...NUM, ...REQ, ...MIN(0) },
+    category: { ...STR, ...REQ },
 });
 
-export const MenuModel = mongoose.model<IDish>("Menu", DishSchema); 
+export const MenuModel = mongoose.model<IDish>("Menu", DishSchema);

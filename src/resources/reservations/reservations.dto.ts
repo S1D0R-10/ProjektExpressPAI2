@@ -1,11 +1,20 @@
 import { Expose } from "class-transformer";
-import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Min } from "class-validator";
+import {
+    IsDateString,
+    IsEnum,
+    IsInt,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
+    Min,
+} from "class-validator";
+
 import { DTO } from "@proj-types/DTO";
 
 export enum ReservationStatus {
     ACTIVE = "active",
     CANCELLED = "cancelled",
-    COMPLETED = "completed"
+    COMPLETED = "completed",
 }
 
 export class CreateReservationDTO extends DTO {

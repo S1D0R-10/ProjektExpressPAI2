@@ -1,5 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+
 import { REQ, STR, NUM, MIN } from "@consts/mongoose-field-declarations";
+import { ReservationStatus } from "@reservations/reservations.dto";
 
 export interface IReservation extends mongoose.Document {
     tableId: mongoose.Types.ObjectId;
@@ -7,20 +9,23 @@ export interface IReservation extends mongoose.Document {
     guests: number;
     date: Date;
     notes?: string;
-    status: "active" | "cancelled" | "completed";
+    status: ReservationStatus;
 }
 
 const ReservationSchema = new mongoose.Schema<IReservation>({
     tableId: {
         type: Schema.Types.ObjectId,
         ref: "Tables",
-        required: true
+        ...REQ,
     },
     clientName: { ...STR, ...REQ },
     guests: { ...NUM, ...REQ, ...MIN(1) },
     date: { type: Date, ...REQ },
     notes: { ...STR },
-    status: { ...STR, ...REQ, enum: ["active", "cancelled", "completed"] }
+    status: { ...STR, ...REQ, enum: ["active", "cancelled", "completed"] },
 });
 
-export const ReservationModel = mongoose.model<IReservation>("Reservations", ReservationSchema);
+export const ReservationModel = mongoose.model<IReservation>(
+    "Reservations",
+    ReservationSchema
+);

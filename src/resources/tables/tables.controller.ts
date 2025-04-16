@@ -29,7 +29,7 @@ tableController.post(
                     .status(StatusCodes.BAD_REQUEST)
                     .send(ErrorMessages.DUPLICATE_VALUE);
             } else {
-                response.status(StatusCodes.INTERNAL_SERVER_ERROR).send()
+                response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
             }
         }
     }

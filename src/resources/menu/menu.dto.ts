@@ -69,4 +69,4 @@ export class UpdateDishDTO extends DTO {
     @IsString()
     @IsNotEmpty()
     category?: string;
-} 
+}
