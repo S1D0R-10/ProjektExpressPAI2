@@ -14,17 +14,6 @@ tableController.get("/", async (_: Request, response: Response) => {
 });
 
 
-/**
- * @openapi
- * /tables:
- *   get:
- *     summary: Get all tables
- *     tags:
- *       - Tables
- *     responses:
- *       200:
- *         description: List of all tables
- */
 tableController.post(
     "/",
     validateDTO(CreateTableDTO),

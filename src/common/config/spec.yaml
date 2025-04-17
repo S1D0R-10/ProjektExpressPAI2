@@ -3,9 +3,24 @@ info:
   title: Restaurant Management API
   description: API for managing a restaurant, including tables, menu, reservations, and orders.
   version: 1.0.0
+
+tags:
+  - name: Tables
+    description: Endpoints for managing tables
+  - name: Menu
+    description: Endpoints for managing menu items
+  - name: Reservations
+    description: Endpoints for managing reservations
+  - name: Orders
+    description: Endpoints for managing orders
+
 paths:
   /tables:
+    tags: 
+      - Tables
     get:
+      tags: 
+        - Tables
       summary: Get all tables
       description: Returns all tables in the restaurant.
       operationId: getAllTables
@@ -27,6 +42,8 @@ paths:
                       type: integer
 
     post:
+      tags: 
+        - Tables
       summary: Create a new table
       description: Creates a new table with the specified data.
       operationId: createTable
@@ -49,6 +66,8 @@ paths:
 
   /tables/{id}:
     delete:
+      tags: 
+        - Tables
       summary: Delete a table
       description: Deletes a table by its ID.
       operationId: deleteTable
@@ -67,6 +86,8 @@ paths:
 
   /menu:
     get:
+      tags: 
+        - Menu
       summary: Get all dishes
       description: Returns all dishes in the menu.
       operationId: getAllDishes
@@ -93,6 +114,8 @@ paths:
                       type: string
 
     post:
+      tags: 
+        - Menu
       summary: Create a new dish
       description: Creates a new dish in the menu.
       operationId: createDish
@@ -115,11 +138,29 @@ paths:
       responses:
         '201':
           description: Dish created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  __id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  price:
+                    type: number
+                    format: float
+                  category:
+                    type: string
         '400':
           description: Invalid input
 
   /menu/{id}:
     get:
+      tags: 
+        - Menu
       summary: Get dish by ID
       description: Returns the dish with the specified ID.
       operationId: getDishById
@@ -151,6 +192,8 @@ paths:
                     type: string
 
     patch:
+      tags: 
+        - Menu
       summary: Edit dish
       description: Edits a dish in the menu.
       operationId: editDish
@@ -179,10 +222,28 @@ paths:
       responses:
         '200':
           description: Dish updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  __id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  price:
+                    type: number
+                    format: float
+                  category:
+                    type: string
         '400':
           description: Invalid input
 
     delete:
+      tags: 
+        - Menu
       summary: Delete dish
       description: Deletes a dish by its ID.
       operationId: deleteDish
@@ -201,6 +262,8 @@ paths:
 
   /reservations:
     get:
+      tags: 
+        - Reservations
       summary: Get all reservations
       description: Returns all reservations in the restaurant.
       operationId: getAllReservations
@@ -230,6 +293,8 @@ paths:
                       enum: [active, cancelled, completed]
 
     post:
+      tags: 
+        - Reservations
       summary: Create a new reservation
       description: Creates a new reservation.
       operationId: createReservation
@@ -255,11 +320,32 @@ paths:
       responses:
         '201':
           description: Reservation created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  __id:
+                    type: string
+                  tableId:
+                    type: string
+                  clientName:
+                    type: string
+                  guests:
+                    type: integer
+                  date:
+                    type: string
+                    format: date-time
+                  status:
+                    type: string
+                    enum: [active, cancelled, completed]
         '400':
           description: Invalid input
 
-  /reservations/{id}:
+  /reservations/by-id/{id}:
     get:
+      tags: 
+        - Reservations
       summary: Get reservation by ID
       description: Returns the reservation with the specified ID.
       operationId: getReservationById
@@ -293,7 +379,10 @@ paths:
                     type: string
                     enum: [active, cancelled, completed]
 
+  /reservations/{id}:
     patch:
+      tags: 
+        - Reservations
       summary: Edit reservation
       description: Edits the reservation.
       operationId: editReservation
@@ -312,6 +401,8 @@ paths:
               properties:
                 clientName:
                   type: string
+                tableId:
+                  type: string
                 guests:
                   type: integer
                 date:
@@ -323,10 +414,31 @@ paths:
       responses:
         '200':
           description: Reservation updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  __id:
+                    type: string
+                  tableId:
+                    type: string
+                  clientName:
+                    type: string
+                  guests:
+                    type: integer
+                  date:
+                    type: string
+                    format: date-time
+                  status:
+                    type: string
+                    enum: [active, cancelled, completed]
         '400':
           description: Invalid input
 
     delete:
+      tags: 
+        - Reservations
       summary: Delete reservation
       description: Deletes the reservation with the specified ID.
       operationId: deleteReservation
@@ -344,7 +456,10 @@ paths:
           description: Invalid reservation ID
 
   /orders:
+
     get:
+      tags: 
+        - Orders
       summary: Get all orders
       description: Returns all orders in the restaurant.
       operationId: getAllOrders
@@ -374,6 +489,8 @@ paths:
                       enum: [cash, card, cheque]
 
     post:
+      tags: 
+        - Orders
       summary: Create a new order
       description: Creates a new order for a reservation.
       operationId: createOrder
@@ -403,7 +520,10 @@ paths:
           description: Invalid input
 
   /orders/{id}:
+
     get:
+      tags: 
+        - Orders
       summary: Get order by ID
       description: Returns the order with the specified ID.
       operationId: getOrderById
@@ -438,6 +558,8 @@ paths:
                     enum: [cash, card, cheque]
 
     patch:
+      tags: 
+        - Orders
       summary: Edit order
       description: Edits the specified order.
       operationId: editOrder
@@ -464,25 +586,68 @@ paths:
                 paymentType:
                   type: string
                   enum: [cash, card, cheque]
+                reservationId:
+                  type: string
+                  
       responses:
         '200':
           description: Order updated successfully
         '400':
-          description: Invalid input
+          description: Invalid input (dish ids, order id, status)
 
-    delete:
-      summary: Delete order
+  /orders/delete-paid:
+
+    post:
+      tags: 
+        - Orders
+      summary: Delete paid orders
       description: Deletes the specified order.
-      operationId: deleteOrder
+      operationId: deletePaid
+      responses:
+        '200':
+          description: Orders deleted successfully
+        '500':
+          description: Internal server error
+
+  /orders/status/{status}:
+    get:
+      tags: 
+        - Orders
+      summary: Get orders by status
+      description: Gets all orders with the specified status
+      operationId: getByStatus
+      responses:
+        '200':
+          description: Orders with status successfully returned
+        '400':
+          description: The provided status is Invalid
+      parameters:
+        - name: status
+          in: path
+          required: true
+          description: The status of which orders are to be returned
+          schema:
+            type: string
+            enum: [pending, fulfilled, paid]
+
+  /orders/advance-status/{id}:
+
+    post:
+      tags: 
+        - Orders
+      summary: Advances status of order
+      description: Advances the status of the order at the specified id
+      operationId: advanceOrderStatus
+      responses:
+        '200':
+          description: Updated order is returned
+        '400':
+          description: The provided id is Invalid
       parameters:
         - name: id
           in: path
           required: true
-          description: The ID of the order to delete
+          description: The id of the order to advance
           schema:
             type: string
-      responses:
-        '204':
-          description: Order deleted successfully
-        '400':
-          description: Invalid order ID
+
