@@ -8,23 +8,21 @@ import { ErrorMessages } from "@proj-types/errors";
 
 export const tableController = express.Router();
 
-tableController.get("/", async (_: Request, response: Response) => {
+tableController.get("/", async (_: Request, response: Response): Promise<void> => {
     const tables = await TablesService.getAllTables();
     response.status(StatusCodes.OK).send(tables);
 });
 
-
 tableController.post(
     "/",
     validateDTO(CreateTableDTO),
-    async (_: Request, response: Response) => {
+    async (_: Request, response: Response): Promise<void> => {
         try {
             const table = await TablesService.createTable(
-                response.locals.dtoInstance
+                response.locals.dtoInstance as CreateTableDTO
             );
             response.status(StatusCodes.CREATED).send(table);
-        } catch (error: unknown) {
-            //@ts-ignore only checking for specific value
+        } catch (error: any) {
             if (error?.message === ErrorMessages.DUPLICATE_VALUE) {
                 response
                     .status(StatusCodes.BAD_REQUEST)
@@ -36,13 +34,12 @@ tableController.post(
     }
 );
 
-tableController.delete("/:id", async (request: Request, response: Response) => {
+tableController.delete("/:id", async (request: Request, response: Response): Promise<void> => {
     try {
         const { id } = request.params;
         await TablesService.deleteTable(id);
         response.status(StatusCodes.NO_CONTENT).send();
-    } catch (error: unknown) {
-        //@ts-ignore only checking for specific value
+    } catch (error: any) {
         if (error?.message === ErrorMessages.INVALID_KEY) {
             response
                 .status(StatusCodes.BAD_REQUEST)
