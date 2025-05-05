@@ -17,43 +17,43 @@ orderController.post(
     "/",
     validateDTO(CreateOrderDTO),
     SetDefaultStatus(OrderStatus.PENDING),
-    async (_: Request, response: Response) => {
+    async (_: Request, response: Response): Promise<void> => {
         try {
             const res = await OrderService.createOrder(
-                response.locals.dtoInstance
+                response.locals.dtoInstance as CreateOrderDTO
             );
             response.status(StatusCodes.CREATED).send(res);
-        } catch (error) {
-            // @ts-ignore only checking specific error case
+        } catch (error: any) {
             if (error?.message === ErrorMessages.INVALID_KEY) {
                 response
                     .status(StatusCodes.BAD_REQUEST)
                     .send(ErrorMessages.INVALID_KEY);
+                return;
             }
             response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
         }
     }
 );
 
-orderController.get("/", async (_: Request, response: Response) => {
+orderController.get("/", async (_: Request, response: Response): Promise<void> => {
     try {
         const res = await OrderService.getAllOrders();
         response.status(StatusCodes.OK).send(res);
-    } catch (error) {
+    } catch {
         response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
     }
 });
 
-orderController.get("/:id", async (request: Request, response: Response) => {
+orderController.get("/:id", async (request: Request, response: Response): Promise<void> => {
     try {
         const res = await OrderService.getOrderById(request.params.id);
         response.status(StatusCodes.OK).send(res);
-    } catch (error) {
-        // @ts-ignore only checking specific error case
+    } catch (error: any) {
         if (error?.message === ErrorMessages.INVALID_KEY) {
             response
                 .status(StatusCodes.BAD_REQUEST)
                 .send(ErrorMessages.INVALID_KEY);
+            return;
         }
         response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
     }
@@ -61,29 +61,23 @@ orderController.get("/:id", async (request: Request, response: Response) => {
 
 orderController.get(
     "/status/:status",
-    async (request: Request, response: Response) => {
+    async (request: Request, response: Response): Promise<void> => {
         try {
-            if (
-                Object.values(OrderStatus).includes(
-                    request.params.status as OrderStatus
-                )
-            ) {
-                const res = await OrderService.getByStatus(
-                    request.params.status as OrderStatus
-                );
-
+            const statusParam = request.params.status as OrderStatus;
+            if (Object.values(OrderStatus).includes(statusParam)) {
+                const res = await OrderService.getByStatus(statusParam);
                 response.status(StatusCodes.OK).send(res);
             } else {
                 response
                     .status(StatusCodes.BAD_REQUEST)
                     .send("Not a valid status");
             }
-        } catch (error) {
-            // @ts-ignore only checking specific error case
+        } catch (error: any) {
             if (error?.message === ErrorMessages.INVALID_KEY) {
                 response
                     .status(StatusCodes.BAD_REQUEST)
                     .send(ErrorMessages.INVALID_KEY);
+                return;
             }
             response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
         }
@@ -92,27 +86,27 @@ orderController.get(
 
 orderController.patch(
     "/advance-status/:id",
-    async (request: Request, response: Response) => {
+    async (request: Request, response: Response): Promise<void> => {
         try {
             const res = await OrderService.advanceStatus(request.params.id);
             response.status(StatusCodes.OK).send(res);
-        } catch (error) {
-            // @ts-ignore only checking specific error case
+        } catch (error: any) {
             if (error?.message === ErrorMessages.INVALID_KEY) {
                 response
                     .status(StatusCodes.BAD_REQUEST)
                     .send(ErrorMessages.INVALID_KEY);
+                return;
             }
             response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
         }
     }
 );
 
-orderController.post("/delete-paid", async (_: Request, response: Response) => {
+orderController.post("/delete-paid", async (_: Request, response: Response): Promise<void> => {
     try {
         const res = await OrderService.deleteCompleted();
         response.status(StatusCodes.OK).send(res);
-    } catch (error) {
+    } catch {
         response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
     }
 });
@@ -120,19 +114,19 @@ orderController.post("/delete-paid", async (_: Request, response: Response) => {
 orderController.patch(
     "/:id",
     validateDTO(UpdateOrderDTO),
-    async (request: Request, response: Response) => {
+    async (request: Request, response: Response): Promise<void> => {
         try {
             const res = await OrderService.editOrder(
                 request.params.id,
-                response.locals.dtoInstance
+                response.locals.dtoInstance as UpdateOrderDTO
             );
-            response.status(StatusCodes.OK).send(res)
-        } catch (error) {
-            // @ts-ignore only checking specific error case
+            response.status(StatusCodes.OK).send(res);
+        } catch (error: any) {
             if (error?.message === ErrorMessages.INVALID_KEY) {
                 response
                     .status(StatusCodes.BAD_REQUEST)
                     .send(ErrorMessages.INVALID_KEY);
+                return;
             }
             response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
         }
