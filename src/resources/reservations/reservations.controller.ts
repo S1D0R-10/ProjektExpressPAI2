@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import {
@@ -14,10 +14,10 @@ export const reservationController = express.Router();
 reservationController.post(
     "/",
     validateDTO(CreateReservationDTO),
-    async (req, res) => {
+    async (req: Request, res: Response): Promise<void> => {
         try {
             const result = await ReservationsService.addReservation(
-                res.locals.dtoInstance
+                res.locals.dtoInstance as CreateReservationDTO
             );
             res.status(StatusCodes.CREATED).send(result);
         } catch {
@@ -26,12 +26,12 @@ reservationController.post(
     }
 );
 
-reservationController.get("/", async (_, res) => {
+reservationController.get("/", async (_: Request, res: Response): Promise<void> => {
     const data = await ReservationsService.getReservations();
     res.status(StatusCodes.OK).send(data);
 });
 
-reservationController.get("/by-id/:id", async (req, res) => {
+reservationController.get("/by-id/:id", async (req: Request, res: Response): Promise<void> => {
     try {
         const data = await ReservationsService.getReservationDetails(
             req.params.id
@@ -42,13 +42,13 @@ reservationController.get("/by-id/:id", async (req, res) => {
     }
 });
 
-reservationController.get("/filter", async (req, res) => {
+reservationController.get("/filter", async (req: Request, res: Response): Promise<void> => {
     const filter = req.query as Partial<Record<string, string>>;
     const data = await ReservationsService.getReservationsFilter(filter);
     res.status(StatusCodes.OK).send(data);
 });
 
-reservationController.delete("/:id", async (req, res) => {
+reservationController.delete("/:id", async (req: Request, res: Response): Promise<void> => {
     try {
         await ReservationsService.freeReservation(req.params.id);
         res.status(StatusCodes.NO_CONTENT).send();
@@ -60,11 +60,11 @@ reservationController.delete("/:id", async (req, res) => {
 reservationController.patch(
     "/:id",
     validateDTO(UpdateReservationDTO),
-    async (req, res) => {
+    async (req: Request, res: Response): Promise<void> => {
         try {
             const updated = await ReservationsService.editReservation(
                 req.params.id,
-                res.locals.dtoInstance
+                res.locals.dtoInstance as UpdateReservationDTO
             );
             res.status(StatusCodes.OK).send(updated);
         } catch {
