@@ -5,13 +5,15 @@ import { CreateDishDTO, UpdateDishDTO } from "@menu/menu.dto";
 import { validateDTO } from "@middleware/validation";
 import { MenuService } from "@menu/menu.service";
 import { ErrorMessages } from "@proj-types/errors";
+import { IDish } from "@menu/menu.model";
+import mongoose from "mongoose";
 
 export const menuController = express.Router();
 
 // GET /menu - Get all dishes
-menuController.get("/", async (_: Request, response: Response) => {
+menuController.get("/", async (_: Request, response: Response<IDish[] | undefined>) => {
     try {
-        const dishes = await MenuService.getAllDishes();
+        const dishes: IDish[] = await MenuService.getAllDishes();
         response.status(StatusCodes.OK).send(dishes);
     } catch (error) {
         response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
@@ -19,13 +21,12 @@ menuController.get("/", async (_: Request, response: Response) => {
 });
 
 // GET /menu/:id - Get dish by ID
-menuController.get("/:id", async (request: Request, response: Response) => {
+menuController.get("/:id", async (request: Request<{id: string}>, response: Response<IDish | string | undefined>) => {
     try {
         const { id } = request.params;
-        const dish = await MenuService.getDishById(id);
+        const dish: IDish = await MenuService.getDishById(id);
         response.status(StatusCodes.OK).send(dish);
-    } catch (error: unknown) {
-        //@ts-ignore only checking for specific value
+    } catch (error: any) {
         if (error?.message === ErrorMessages.INVALID_KEY) {
             response
                 .status(StatusCodes.NOT_FOUND)
@@ -40,13 +41,13 @@ menuController.get("/:id", async (request: Request, response: Response) => {
 menuController.post(
     "/",
     validateDTO(CreateDishDTO),
-    async (_: Request, response: Response) => {
+    async (_: Request, response: Response<IDish | undefined>) => {
         try {
-            const dish = await MenuService.createDish(
-                response.locals.dtoInstance
+            const dish: IDish = await MenuService.createDish(
+                response.locals.dtoInstance as CreateDishDTO
             );
             response.status(StatusCodes.CREATED).send(dish);
-        } catch (error: unknown) {
+        } catch (error: any) {
             response.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
         }
     }
@@ -56,16 +57,15 @@ menuController.post(
 menuController.patch(
     "/:id",
     validateDTO(UpdateDishDTO),
-    async (request: Request, response: Response) => {
+    async (request: Request<{id: string}>, response: Response<IDish | string | undefined>) => {
         try {
             const { id } = request.params;
-            const updatedDish = await MenuService.updateDish(
+            const updatedDish: IDish | null = await MenuService.updateDish(
                 id,
-                response.locals.dtoInstance
+                response.locals.dtoInstance as UpdateDishDTO
             );
-            response.status(StatusCodes.OK).send(updatedDish);
-        } catch (error: unknown) {
-            //@ts-ignore only checking for specific value
+            response.status(StatusCodes.OK).send(updatedDish as IDish);
+        } catch (error: any) {
             if (error?.message === ErrorMessages.INVALID_KEY) {
                 response
                     .status(StatusCodes.NOT_FOUND)
@@ -78,13 +78,12 @@ menuController.patch(
 );
 
 // DELETE /menu/:id - Delete a dish
-menuController.delete("/:id", async (request: Request, response: Response) => {
+menuController.delete("/:id", async (request: Request<{id: string}>, response: Response<IDish | string | undefined>) => {
     try {
         const { id } = request.params;
         await MenuService.deleteDish(id);
         response.status(StatusCodes.NO_CONTENT).send();
-    } catch (error: unknown) {
-        //@ts-ignore only checking for specific value
+    } catch (error: any) {
         if (error?.message === ErrorMessages.INVALID_KEY) {
             response
                 .status(StatusCodes.NOT_FOUND)
